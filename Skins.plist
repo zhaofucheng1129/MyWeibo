@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>nightdream</key>
+	<string>Skins/com.sina.weibo.nightdream</string>
+	<key>bluesky</key>
+	<string>Skins/com.sina.weibo.bluesky</string>
+	<key>brown</key>
+	<string>Skins/com.sina.weibo.brown</string>
+	<key>greenvitality</key>
+	<string>Skins/com.sina.weibo.greenvitality</string>
+	<key>grey</key>
+	<string>Skins/com.sina.weibo.grey</string>
+	<key>pinkallure</key>
+	<string>Skins/com.sina.weibo.pinkallure</string>
+</dict>
+</plist>
