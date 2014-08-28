@@ -15,6 +15,8 @@
 #import <AudioToolbox/AudioToolbox.h>
 #import "RootViewController.h"
 #import "DetailViewController.h"
+#import "KxMenu.h"
+
 
 @interface HomeViewController ()
 
@@ -39,6 +41,8 @@
     [leftButton setFrame:CGRectMake(0, 0, 30, 30)];
     UIButton *rightButton = [UIFactory createButton:@"navigationbar_pop@2x.png" highlight:@"navigationbar_pop_highlighted@2x.png"];
     [rightButton setFrame:CGRectMake(0, 0, 30, 30)];
+    [rightButton addTarget:self action:@selector(showMenu:) forControlEvents:UIControlEventTouchUpInside];
+    
     UIBarButtonItem *leftItem = [[UIBarButtonItem alloc] initWithCustomView:leftButton];
     UIBarButtonItem *rightItem = [[UIBarButtonItem alloc] initWithCustomView:rightButton];
     self.navigationItem.leftBarButtonItem = leftItem;
@@ -59,6 +63,139 @@
     
     [self loadStatusDataWithSinceId:@"0" MaxId:@"0" Count:20];
 }
+
+- (void)showMenu:(UIButton *)sender
+{
+    NSArray *menuItems =
+    @[
+      [KxMenuItem menuItem:@"扫一扫"
+                     image:nil
+                    target:self
+                    action:@selector(pushMenuItem:)],
+      
+      [KxMenuItem menuItem:@"刷新"
+                     image:nil
+                    target:self
+                    action:@selector(refreshLoading)],
+      ];
+    
+    KxMenuItem *first = menuItems[0];
+    first.foreColor = [UIColor colorWithRed:47/255.0f green:112/255.0f blue:225/255.0f alpha:1.0];
+    first.alignment = NSTextAlignmentLeft;
+    
+    [KxMenu showMenuInView:self.navigationController.view
+                  fromRect:sender.frame
+                 menuItems:menuItems];
+
+}
+
+- (void) pushMenuItem:(id)sender
+{
+    /*扫描二维码部分：
+     导入ZBarSDK文件并引入一下框架
+     AVFoundation.framework
+     CoreMedia.framework
+     CoreVideo.framework
+     QuartzCore.framework
+     libiconv.dylib
+     引入头文件#import “ZBarSDK.h” 即可使用
+     当找到条形码时，会执行代理方法
+     
+     - (void) imagePickerController: (UIImagePickerController*) reader didFinishPickingMediaWithInfo: (NSDictionary*) info
+     
+     最后读取并显示了条形码的图片和内容。*/
+    
+    ZBarReaderViewController *reader = [ZBarReaderViewController new];
+    reader.readerDelegate = self;
+    reader.supportedOrientationsMask = ZBarOrientationMaskAll;
+    
+    ZBarImageScanner *scanner = reader.scanner;
+    
+    [scanner setSymbology: ZBAR_I25
+                   config: ZBAR_CFG_ENABLE
+                       to: 0];
+    
+    [self presentViewController:reader animated:YES completion:^{
+        
+    }];
+    [reader release];
+}
+
+#pragma mark - ZBarReaderDelegate Methods
+- (void) imagePickerController: (UIImagePickerController*) reader
+ didFinishPickingMediaWithInfo: (NSDictionary*) info
+{
+    id<NSFastEnumeration> results =
+    [info objectForKey: ZBarReaderControllerResults];
+    ZBarSymbol *symbol = nil;
+    for(symbol in results)
+        break;
+    
+//    imageview.image = [info objectForKey: UIImagePickerControllerOriginalImage];
+    
+    [reader dismissViewControllerAnimated:YES completion:^{
+        
+    }];
+    
+    //判断是否包含 头'http:'
+    NSString *regex = @"http+:[^\\s]*";
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"SELF MATCHES %@",regex];
+    
+    //判断是否包含 头'ssid:'
+    NSString *ssid = @"ssid+:[^\\s]*";;
+    NSPredicate *ssidPre = [NSPredicate predicateWithFormat:@"SELF MATCHES %@",ssid];
+    
+    NSLog(@"二维码信息：%@",symbol.data);
+    
+    if ([predicate evaluateWithObject:symbol.data]) {
+        
+        UIAlertView * alert = [[UIAlertView alloc]initWithTitle:nil
+                                                        message:symbol.data
+                                                       delegate:nil
+                                              cancelButtonTitle:@"Close"
+                                              otherButtonTitles:@"Ok", nil];
+        alert.delegate = self;
+        alert.tag=1;
+        [alert show];
+        [alert release];
+        
+        
+        
+    }
+    else if([ssidPre evaluateWithObject:symbol.data]){
+        
+        NSArray *arr = [symbol.data componentsSeparatedByString:@";"];
+        
+        NSArray * arrInfoHead = [[arr objectAtIndex:0] componentsSeparatedByString:@":"];
+        
+        NSArray * arrInfoFoot = [[arr objectAtIndex:1] componentsSeparatedByString:@":"];
+        
+        
+        NSLog(@"二维码信息：%@",[NSString stringWithFormat:@"ssid: %@ \n password:%@",
+                     [arrInfoHead objectAtIndex:1],[arrInfoFoot objectAtIndex:1]]);
+        
+        
+        UIAlertView * alert = [[UIAlertView alloc]initWithTitle:symbol.data
+                                                        message:@"The password is copied to the clipboard , it will be redirected to the network settings interface"
+                                                       delegate:nil
+                                              cancelButtonTitle:@"Close"
+                                              otherButtonTitles:@"Ok", nil];
+        
+        
+        alert.delegate = self;
+        alert.tag=2;
+        [alert show];
+        [alert release];
+        
+        UIPasteboard *pasteboard=[UIPasteboard generalPasteboard];
+        //        然后，可以使用如下代码来把一个字符串放置到剪贴板上：
+        pasteboard.string = [arrInfoFoot objectAtIndex:1];
+        
+        
+    }
+}
+
+
 
 - (void)didReceiveMemoryWarning
 {

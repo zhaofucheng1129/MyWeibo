@@ -20,6 +20,8 @@
 #import "UIFactory.h"
 #import "SinaDataService.h"
 
+#import "CHTumblrMenuView.h"
+
 @interface RootViewController ()
 
 /**
@@ -205,6 +207,35 @@
             HomeViewController *homeCtrl = [homeNav.viewControllers firstObject];
             [homeCtrl refreshLoading];
         }
+    }else
+    {
+        CHTumblrMenuView *menuView = [[CHTumblrMenuView alloc] init];
+        [menuView addMenuItemWithTitle:@"文字" andIcon:[UIImage imageNamed:@"tabbar_compose_idea"] andSelectedBlock:^{
+            NSLog(@"Text selected");
+        }];
+        [menuView addMenuItemWithTitle:@"相册" andIcon:[UIImage imageNamed:@"tabbar_compose_photo"] andSelectedBlock:^{
+            NSLog(@"Photo selected");
+        }];
+        [menuView addMenuItemWithTitle:@"拍摄" andIcon:[UIImage imageNamed:@"tabbar_compose_camera"] andSelectedBlock:^{
+            NSLog(@"Quote selected");
+            
+        }];
+        [menuView addMenuItemWithTitle:@"签到" andIcon:[UIImage imageNamed:@"tabbar_compose_lbs"] andSelectedBlock:^{
+            NSLog(@"Link selected");
+            
+        }];
+        [menuView addMenuItemWithTitle:@"点评" andIcon:[UIImage imageNamed:@"tabbar_compose_review"] andSelectedBlock:^{
+            NSLog(@"Chat selected");
+            
+        }];
+        [menuView addMenuItemWithTitle:@"更多" andIcon:[UIImage imageNamed:@"tabbar_compose_more"] andSelectedBlock:^{
+            NSLog(@"Video selected");
+            
+        }];
+        
+        
+        
+        [menuView show];
     }
     
     self.selectedIndex = button.tag;

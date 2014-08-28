@@ -8,8 +8,9 @@
 
 #import "BaseViewController.h"
 #import "StatusTableView.h"
+#import "ZBarSDK.h"
 
-@interface HomeViewController : BaseViewController <UITableViewEventDelegate>
+@interface HomeViewController : BaseViewController <UITableViewEventDelegate,ZBarReaderDelegate>
 {
     CGFloat _height;
 }
