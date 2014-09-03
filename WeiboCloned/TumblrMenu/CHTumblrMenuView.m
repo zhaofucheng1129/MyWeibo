@@ -45,7 +45,9 @@
 {
     UIImageView *iconView_;
     UILabel *titleLabel_;
+    
 }
+
 - (id)initWithTitle:(NSString*)title andIcon:(UIImage*)icon andSelectedBlock:(CHTumblrMenuViewSelectedBlock)block
 {
     self = [super init];
@@ -79,6 +81,9 @@
 {
     UIImageView *backgroundView_;
     NSMutableArray *buttons_;
+    
+    //ToolBar底部按钮
+    UIButton *_addBut;
 }
 
 
@@ -93,11 +98,19 @@
         [self addGestureRecognizer:ges];
         self.backgroundColor = [UIColor clearColor];
         backgroundView_ = [[UIImageView alloc] initWithFrame:self.bounds];
-        backgroundView_.image = [[UIImage imageNamed:@"modal_background.png"] stretchableImageWithLeftCapWidth:10 topCapHeight:6];
+        backgroundView_.image = [[UIImage imageNamed:@"tabbar_compose_below_background@2x.png"] stretchableImageWithLeftCapWidth:1 topCapHeight:6];
         backgroundView_.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
         [self addSubview:backgroundView_];
         buttons_ = [[NSMutableArray alloc] initWithCapacity:6];
         
+        UIImageView *imageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"tabbar_background@2x.png"]];
+        [imageView setFrame:CGRectMake(0, ScreenHeight - 44, ScreenWidth, 44)];
+        [self addSubview:imageView];
+        
+        _addBut = [UIButton buttonWithType:UIButtonTypeCustom];
+        [_addBut setImage:[UIImage imageNamed:@"tabbar_compose_background_icon_add@2x.png"] forState:UIControlStateNormal];
+        [_addBut setFrame:CGRectMake((imageView.width - 24) / 2, (imageView.height - 24) / 2, 24, 24)];
+        [imageView addSubview:_addBut];
         
     }
     return self;
@@ -180,10 +193,8 @@
     dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInSeconds * NSEC_PER_SEC));
     dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
         btn.selectedBlock();
-
     });
 }
-
 
 - (void)riseAnimation
 {
@@ -223,7 +234,22 @@
         positionAnimation.delegate = self;
         
         [button.layer addAnimation:positionAnimation forKey:@"riseAnimation"];
-
+        
+        
+        CABasicAnimation* anim = [CABasicAnimation animationWithKeyPath:@"transform"];
+        CATransform3D fromValue = _addBut.layer.transform;
+        // 设置动画开始的属性值
+        anim.fromValue = [NSValue valueWithCATransform3D:fromValue];
+        // 绕Z轴旋转180度
+        CATransform3D toValue = CATransform3DRotate(fromValue, M_PI_4 / 6, 0 , 0 , 1);
+        // 设置动画结束的属性值
+        anim.toValue = [NSValue valueWithCATransform3D:toValue];
+        anim.duration = 0.2;
+        anim.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionLinear];
+        _addBut.layer.transform = toValue;
+        anim.removedOnCompletion = YES;
+        [_addBut.layer addAnimation:anim forKey:nil];
+        
 
         NSString *filePath = [[NSBundle mainBundle] pathForResource:@"composer_open" ofType:@"wav"];
         NSURL *url = [NSURL fileURLWithPath:filePath];
@@ -269,6 +295,23 @@
         
         [button.layer addAnimation:positionAnimation forKey:@"riseAnimation"];
         
+        
+        
+        CABasicAnimation* anim = [CABasicAnimation animationWithKeyPath:@"transform"];
+        CATransform3D fromValue = _addBut.layer.transform;
+        // 设置动画开始的属性值
+        anim.fromValue = [NSValue valueWithCATransform3D:fromValue];
+        // 绕Z轴旋转180度
+        CATransform3D toValue = CATransform3DRotate(fromValue, - M_PI_4 / 6, 0 , 0 , 1);
+        // 设置动画结束的属性值
+        anim.toValue = [NSValue valueWithCATransform3D:toValue];
+        anim.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionLinear];
+        anim.duration = 0.2;
+        _addBut.layer.transform = toValue;
+        anim.removedOnCompletion = YES;
+        [_addBut.layer addAnimation:anim forKey:nil];
+        
+        
         NSString *filePath = [[NSBundle mainBundle] pathForResource:@"composer_close" ofType:@"wav"];
         NSURL *url = [NSURL fileURLWithPath:filePath];
         SystemSoundID soundId;
@@ -292,6 +335,7 @@
         view.layer.position = toPosition;
         view.layer.opacity = toAlpha;
         
+//        [_addBut setImage:[UIImage imageNamed:@"tabbar_compose_background_icon_close@2x.png"] forState:UIControlStateNormal];
     }
     else if([anim valueForKey:CHTumblrMenuViewDismissAnimationID]) {
         NSUInteger index = [[anim valueForKey:CHTumblrMenuViewDismissAnimationID] unsignedIntegerValue];
@@ -303,6 +347,7 @@
         
         view.layer.position = toPosition;
     }
+    
 }
 
 

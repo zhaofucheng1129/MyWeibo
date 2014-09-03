@@ -7,7 +7,13 @@
 //
 
 #import "BaseViewController.h"
+#import "MessageTableView.h"
 
 @interface MessageViewController : BaseViewController
+{
+    CGFloat _height;
+}
+
+@property (nonatomic, retain) MessageTableView *tableView;
 
 @end

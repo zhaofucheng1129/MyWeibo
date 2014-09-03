@@ -9,13 +9,14 @@
 #import <UIKit/UIKit.h>
 #import "RTLabel.h"
 #import "Status.h"
-
+#import "PhotoView.h"
 
 @interface StatusView : UIView <RTLabelDelegate>
 {
     @private
     RTLabel *_textLabel;
-    UIImageView *_image;
+    UIImageView *_image; //微博图片
+    PhotoView *_photoView;
     UIImageView *_backgroundImage;
     StatusView *_retweetView;
     

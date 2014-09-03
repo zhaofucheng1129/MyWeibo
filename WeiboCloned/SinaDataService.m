@@ -169,4 +169,58 @@
     }];
 }
 
+/**
+ * 根据用户ID获取用户信息
+ * @param source        false	string	采用OAuth授权方式不需要此参数，其他授权方式为必填参数，数值为应用的AppKey。
+ * @param access_token	false	string	采用OAuth授权方式为必填参数，其他授权方式不需要此参数，OAuth授权后获得。
+ * @param uid           false	int64	需要查询的用户ID。
+ * @param screen_name	false	string	需要查询的用户昵称。
+ */
++ (void)getUserDataWithUid:(NSString *)uid ScreenName:(NSString *)screenName Success:(void(^)(BOOL isSuccess,User *user))isSuccess
+{
+    NSString *tokenString = [[NSUserDefaults standardUserDefaults] objectForKey:kSinaAccessTokenKey];
+    NSMutableDictionary *params = [[NSMutableDictionary alloc] init];
+    [params setObject:tokenString forKey:@"access_token"];
+    [params setObject:uid forKey:@"uid"];
+    [params setObject:screenName forKey:@"screen_name"];
+    [NetRequest requestWithURL:@"https://api.weibo.com/2/users/show.json" params:params httpMethod:@"GET" completionBlock:^(id result) {
+        if (isSuccess != nil) {
+            isSuccess(YES,result);
+        }
+    } errorBlock:^(id error) {
+        if (isSuccess != nil) {
+            isSuccess(NO,nil);
+        }
+    }];
+}
+
+/**
+ * 发布一条新微博
+ * @param   source          false	string	采用OAuth授权方式不需要此参数，其他授权方式为必填参数，数值为应用的AppKey。
+ * @param   access_token	false	string	采用OAuth授权方式为必填参数，其他授权方式不需要此参数，OAuth授权后获得。
+ * @param   status          true	string	要发布的微博文本内容，必须做URLencode，内容不超过140个汉字。
+ * @param   visible         false	int	微博的可见性，0：所有人能看，1：仅自己可见，2：密友可见，3：指定分组可见，默认为0。
+ * @param   list_id         false	string	微博的保护投递指定分组ID，只有当visible参数为3时生效且必选。
+ * @param   lat             false	float	纬度，有效范围：-90.0到+90.0，+表示北纬，默认为0.0。
+ * @param   long            false	float	经度，有效范围：-180.0到+180.0，+表示东经，默认为0.0。
+ * @param   annotations     false	string	元数据，主要是为了方便第三方应用记录一些适合于自己使用的信息，每条微博可以包含一个或者多个元数据，必须以json字串的形式提交，字串长度不超过512个字符，具体内容可以自定。
+ * @param   rip             false	string	开发者上报的操作用户真实IP，形如：211.156.0.1。
+ */
++ (void)sendSimpleWeiboWithStatus:(NSString *)status Visible:(NSString *)visible ListId:(NSString *)listId Lat:(CGFloat)lat Long:(CGFloat)longF Annotations:(NSString *)annotations Rip:(NSString *)rip Success:(void(^)(BOOL isSuccess))isSuccess
+{
+    NSString *tokenString = [[NSUserDefaults standardUserDefaults] objectForKey:kSinaAccessTokenKey];
+    NSMutableDictionary *params = [[NSMutableDictionary alloc] init];
+    [params setObject:tokenString forKey:@"access_token"];
+    [params setObject:status forKey:@"status"];
+    [NetRequest requestWithURL:@"https://api.weibo.com/2/statuses/update.json" params:params httpMethod:@"POST" completionBlock:^(id result) {
+        if (isSuccess != nil) {
+            isSuccess(YES);
+        }
+    } errorBlock:^(id error) {
+        if (isSuccess != nil) {
+            isSuccess(NO);
+        }
+    }];
+}
+
 @end

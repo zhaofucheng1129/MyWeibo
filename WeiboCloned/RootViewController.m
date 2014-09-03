@@ -22,6 +22,8 @@
 
 #import "CHTumblrMenuView.h"
 
+#import "SendViewController.h"
+
 @interface RootViewController ()
 
 /**
@@ -207,11 +209,23 @@
             HomeViewController *homeCtrl = [homeNav.viewControllers firstObject];
             [homeCtrl refreshLoading];
         }
+        
+        self.selectedIndex = button.tag;
     }else
     {
+//        NSArray *viewController = self.viewControllers;
+//        __block UINavigationController *nav = [viewController objectAtIndex:1];
+        
         CHTumblrMenuView *menuView = [[CHTumblrMenuView alloc] init];
         [menuView addMenuItemWithTitle:@"文字" andIcon:[UIImage imageNamed:@"tabbar_compose_idea"] andSelectedBlock:^{
-            NSLog(@"Text selected");
+            SendViewController *sendView = [[SendViewController alloc] init];
+            UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:sendView];
+            [sendView release];
+            RootViewController * rootView = (RootViewController *)[[UIApplication sharedApplication].delegate window].rootViewController;
+            [rootView presentViewController:nav animated:YES completion:^{
+                
+            }];
+            
         }];
         [menuView addMenuItemWithTitle:@"相册" andIcon:[UIImage imageNamed:@"tabbar_compose_photo"] andSelectedBlock:^{
             NSLog(@"Photo selected");
@@ -237,8 +251,6 @@
         
         [menuView show];
     }
-    
-    self.selectedIndex = button.tag;
 }
 //IOS6下隐藏TabBar
 - (void) hideTabBar:(BOOL) hidden{

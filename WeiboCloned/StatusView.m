@@ -12,6 +12,7 @@
 #import "RegexKitLite.h"
 #import "NSString+URLEncoding.h"
 
+
 #define LIST_FONT   14.0f
 #define LIST_RETWEET_FONT   13.0f
 #define DETAIL_FONT 18.0f
@@ -40,9 +41,12 @@
     [self addSubview:_textLabel];
     
     //微博图片
-    _image = [[UIImageView alloc] initWithFrame:CGRectZero];
-    _image.image = [UIImage imageNamed:@"page_image_loading@2x.png"];
-    [self addSubview:_image];
+//    _image = [[UIImageView alloc] initWithFrame:CGRectZero];
+//    _image.image = [UIImage imageNamed:@"page_image_loading@2x.png"];
+//    [self addSubview:_image];
+    _photoView = [[PhotoView alloc] initWithFrame:CGRectZero];
+    [self addSubview:_photoView];
+    
     
     //微博背景图片
     _backgroundImage = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"timeline_retweet_background@2x.png"]];
@@ -56,6 +60,7 @@
 - (void)layoutSubviews
 {
     [super layoutSubviews];
+    
     //设置微博内容
     CGFloat fontSize = [StatusView getFontSize:self.isDetail isRetweet:self.isRetweet];
     [_textLabel setFrame:CGRectMake(10, 5, ScreenWidth - 20, 0)];
@@ -80,32 +85,26 @@
     }
     //设置微博图片
     if (self.isDetail) {
-        NSString *imageStr = self.statusDate.bmiddle_pic;
-        if (imageStr != nil && ![imageStr isEqualToString:@""]) {
-            _image.hidden = NO;
-            [_image setFrame:CGRectMake(10, _textLabel.bottom + 5, ScreenWidth - 20, 200)];
-            //加载网络图片
-            [_image sd_setImageWithURL:[NSURL URLWithString:imageStr]];
-//            [_image setContentMode:UIViewContentModeScaleAspectFill ];
+        NSArray *urls = self.statusDate.pic_urls;
+        if (urls.count > 0) {
+            _photoView.urls = urls;
+            [_photoView setFrame:CGRectMake(10, _textLabel.bottom + 5, ScreenWidth - 20, 200)];
         }
         else
         {
-            _image.hidden = YES;
+            _photoView.hidden = YES;
         }
     }
     else
     {
-        NSString *imageStr = self.statusDate.thumbnail_pic;
-        if (imageStr != nil && ![imageStr isEqualToString:@""]) {
-            _image.hidden = NO;
-            [_image setFrame:CGRectMake(10, _textLabel.bottom + 5, 120, 200)];
-            //加载网络图片
-            [_image sd_setImageWithURL:[NSURL URLWithString:imageStr]];
-            [_image setContentMode:UIViewContentModeScaleAspectFit | UIViewContentModeTopLeft ];
+        NSArray *urls = self.statusDate.pic_urls;
+        if (urls.count > 0) {
+            _photoView.urls = urls;
+            [_photoView setFrame:CGRectMake(10, _textLabel.bottom + 5, 120, 200)];
         }
         else
         {
-            _image.hidden = YES;
+            _photoView.hidden = YES;
         }
     }
     
@@ -199,19 +198,13 @@
     
     //微博图片的高度
     if (isDetail) {
-        NSString *imageStr = status.bmiddle_pic;
-        if (imageStr != nil && ![imageStr isEqualToString:@""]) {
-            //        UIImage *image = [UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:imageStr]]];
-            height += (200 + 10);
-        }
+        int count = status.pic_urls.count;
+        height += [PhotoView getHeight:count + 1] + 10;
     }
     else
     {
-        NSString *imageStr = status.thumbnail_pic;
-        if (imageStr != nil && ![imageStr isEqualToString:@""]) {
-    //        UIImage *image = [UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:imageStr]]];
-            height += (120 + 10);
-        }
+        int count = status.pic_urls.count;
+        height += [PhotoView getHeight:count];
     }
     
     //转发原微博高度
@@ -221,9 +214,9 @@
         height += [StatusView getStatusViewHeight:retStatus isRetweet:YES isDetail:isDetail];
     }
     
-//    if (isRetweet) {
-//        height += 20;
-//    }
+    //    if (isRetweet) {
+    //        height += 20;
+    //    }
     
     return height;
 }
@@ -242,7 +235,6 @@
         _retweetView.isDetail = self.isDetail;
         [self addSubview:_retweetView];
     }
-    
     [self parseLink];
 }
 
@@ -255,6 +247,10 @@
     
     if ([absoluteString hasPrefix:@"user"]) {
         NSLog(@"user:%@",urlString);
+        
+        UIViewController *myView = [[UIViewController alloc] init];
+        [self.viewController.navigationController pushViewController:myView animated:YES];
+        
     }
     else if ([absoluteString hasPrefix:@"topic"]) {
         NSLog(@"topic:%@",urlString);

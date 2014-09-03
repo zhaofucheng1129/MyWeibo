@@ -61,7 +61,6 @@
     
     [self setBackgroundImage:backgroundImage forState:UIControlStateNormal];
     [self setBackgroundImage:backgroundHighlightImage forState:UIControlStateHighlighted];
-    
 }
 
 #pragma mark - Setter

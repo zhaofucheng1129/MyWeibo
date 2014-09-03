@@ -24,7 +24,7 @@
 //  THE SOFTWARE.
 
 #import <UIKit/UIKit.h>
-typedef void (^CHTumblrMenuViewSelectedBlock)(void);
+typedef void (^CHTumblrMenuViewSelectedBlock)();
 
 
 @interface CHTumblrMenuView : UIView<UIGestureRecognizerDelegate>

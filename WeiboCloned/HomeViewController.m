@@ -145,12 +145,20 @@
     NSString *ssid = @"ssid+:[^\\s]*";;
     NSPredicate *ssidPre = [NSPredicate predicateWithFormat:@"SELF MATCHES %@",ssid];
     
-    NSLog(@"二维码信息：%@",symbol.data);
+    NSString *contentString =  symbol.data;
+    //处理部分中文乱码问题
     
-    if ([predicate evaluateWithObject:symbol.data]) {
+    if ([contentString canBeConvertedToEncoding:NSShiftJISStringEncoding])
+    {
+        contentString = [NSString stringWithCString:[contentString cStringUsingEncoding:NSShiftJISStringEncoding] encoding:NSUTF8StringEncoding];
+    }
+    
+    NSLog(@"二维码信息：%@",contentString);
+    
+    if ([predicate evaluateWithObject:contentString]) {
         
         UIAlertView * alert = [[UIAlertView alloc]initWithTitle:nil
-                                                        message:symbol.data
+                                                        message:contentString
                                                        delegate:nil
                                               cancelButtonTitle:@"Close"
                                               otherButtonTitles:@"Ok", nil];
@@ -162,9 +170,9 @@
         
         
     }
-    else if([ssidPre evaluateWithObject:symbol.data]){
+    else if([ssidPre evaluateWithObject:contentString]){
         
-        NSArray *arr = [symbol.data componentsSeparatedByString:@";"];
+        NSArray *arr = [contentString componentsSeparatedByString:@";"];
         
         NSArray * arrInfoHead = [[arr objectAtIndex:0] componentsSeparatedByString:@":"];
         
@@ -175,7 +183,7 @@
                      [arrInfoHead objectAtIndex:1],[arrInfoFoot objectAtIndex:1]]);
         
         
-        UIAlertView * alert = [[UIAlertView alloc]initWithTitle:symbol.data
+        UIAlertView * alert = [[UIAlertView alloc]initWithTitle:contentString
                                                         message:@"The password is copied to the clipboard , it will be redirected to the network settings interface"
                                                        delegate:nil
                                               cancelButtonTitle:@"Close"
@@ -207,7 +215,7 @@
 {
     if (count > 0) {
         if (self.newStatusCountView == nil) {
-            self.newStatusCountView = [[UIFactory createImageView:@"timeline_new_status_background@2x.png"] retain];
+            self.newStatusCountView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"timeline_new_status_background@2x.png"]];
             self.newStatusCountView.frame = CGRectMake(0, _height - 35, ScreenWidth, 35);
             [self.view addSubview:self.newStatusCountView];
             
@@ -278,7 +286,6 @@
 {
     [SinaDataService getStatusDataWithSinceId:sinceId MaxId:maxId Count:count Page:1 BaseApp:0 Feature:0 TrimUser:0 Success:^(BOOL isSuccess, NSMutableArray *array) {
         if (isSuccess) {
-            
             if (array.count > 0) {
                 Status *status = [array firstObject];
                 self.SinceId = status.idstr;
