@@ -212,6 +212,13 @@
     NSMutableDictionary *params = [[NSMutableDictionary alloc] init];
     [params setObject:tokenString forKey:@"access_token"];
     [params setObject:status forKey:@"status"];
+//    [params setObject:visible forKey:@"visible"];
+//    [params setObject:listId forKey:@"list_id"];
+    [params setObject:[NSNumber numberWithFloat:lat] forKey:@"lat"];
+    [params setObject:[NSNumber numberWithFloat:longF] forKey:@"long"];
+//    [params setObject:annotations forKey:@"annotations"];
+//    [params setObject:rip forKey:@"rip"];
+    
     [NetRequest requestWithURL:@"https://api.weibo.com/2/statuses/update.json" params:params httpMethod:@"POST" completionBlock:^(id result) {
         if (isSuccess != nil) {
             isSuccess(YES);
@@ -219,6 +226,46 @@
     } errorBlock:^(id error) {
         if (isSuccess != nil) {
             isSuccess(NO);
+        }
+    }];
+}
+
+/**
+ * 获取附近地点
+ * @param   source          false	string	采用OAuth授权方式不需要此参数，其他授权方式为必填参数，数值为应用的AppKey。
+ * @param   access_token	false	string	采用OAuth授权方式为必填参数，其他授权方式不需要此参数，OAuth授权后获得。
+ * @param   lat             true	float	纬度，有效范围：-90.0到+90.0，+表示北纬。
+ * @param   long            true	float	经度，有效范围：-180.0到+180.0，+表示东经。
+ * @param   range           false	int     查询范围半径，默认为2000，最大为10000，单位米。
+ * @param   q               false	string	查询的关键词，必须进行URLencode。
+ * @param   category        false	string	查询的分类代码，取值范围见：分类代码对应表。
+ * @param   count           false	int     单页返回的记录条数，默认为20，最大为50。
+ * @param   page            false	int     返回结果的页码，默认为1。
+ * @param   sort            false	int     排序方式，0：按权重，1：按距离，3：按签到人数。默认为0。
+ * @param   offset          false	int     传入的经纬度是否是纠偏过，0：没纠偏、1：纠偏过，默认为0。
+ */
++ (void)getNearbyPoisWithLat:(CGFloat)lat Long:(CGFloat)longF range:(NSInteger)range Q:(NSString *)q Category:(NSString *)category Count:(NSInteger)count Page:(NSInteger)page Sort:(NSInteger)sort Offset:(NSInteger)offset Success:(void(^)(BOOL isSuccess,NSDictionary *result))isSuccess
+{
+    NSString *tokenString = [[NSUserDefaults standardUserDefaults] objectForKey:kSinaAccessTokenKey];
+    NSMutableDictionary *params = [[NSMutableDictionary alloc] init];
+    [params setObject:tokenString forKey:@"access_token"];
+    [params setObject:[NSString stringWithFormat:@"%f",lat] forKey:@"lat"];
+    [params setObject:[NSString stringWithFormat:@"%f",longF] forKey:@"long"];
+    [params setObject:[NSString stringWithFormat:@"%d",range] forKey:@"range"];
+    [params setObject:q forKey:@"q"];
+    [params setObject:category forKey:@"category"];
+    [params setObject:[NSString stringWithFormat:@"%d",count] forKey:@"count"];
+    [params setObject:[NSString stringWithFormat:@"%d",page] forKey:@"page"];
+    [params setObject:[NSString stringWithFormat:@"%d",sort] forKey:@"sort"];
+    [params setObject:[NSString stringWithFormat:@"%d",offset] forKey:@"offset"];
+    
+    [NetRequest requestWithURL:@"https://api.weibo.com/2/place/nearby/pois.json" params:params httpMethod:@"GET" completionBlock:^(id result) {
+        if (isSuccess != nil) {
+            isSuccess(YES,result);
+        }
+    } errorBlock:^(id error) {
+        if (isSuccess != nil) {
+            isSuccess(NO,nil);
         }
     }];
 }

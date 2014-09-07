@@ -86,7 +86,7 @@
  * @param   source          false	string	采用OAuth授权方式不需要此参数，其他授权方式为必填参数，数值为应用的AppKey。
  * @param   access_token	false	string	采用OAuth授权方式为必填参数，其他授权方式不需要此参数，OAuth授权后获得。
  * @param   status          true	string	要发布的微博文本内容，必须做URLencode，内容不超过140个汉字。
- * @param   visible         false	int	微博的可见性，0：所有人能看，1：仅自己可见，2：密友可见，3：指定分组可见，默认为0。
+ * @param   visible         false	int     微博的可见性，0：所有人能看，1：仅自己可见，2：密友可见，3：指定分组可见，默认为0。
  * @param   list_id         false	string	微博的保护投递指定分组ID，只有当visible参数为3时生效且必选。
  * @param   lat             false	float	纬度，有效范围：-90.0到+90.0，+表示北纬，默认为0.0。
  * @param   long            false	float	经度，有效范围：-180.0到+180.0，+表示东经，默认为0.0。
@@ -94,4 +94,20 @@
  * @param   rip             false	string	开发者上报的操作用户真实IP，形如：211.156.0.1。
  */
 + (void)sendSimpleWeiboWithStatus:(NSString *)status Visible:(NSString *)visible ListId:(NSString *)listId Lat:(CGFloat)lat Long:(CGFloat)longF Annotations:(NSString *)annotations Rip:(NSString *)rip Success:(void(^)(BOOL isSuccess))isSuccess;
+
+/**
+ * 获取附近地点
+ * @param   source          false	string	采用OAuth授权方式不需要此参数，其他授权方式为必填参数，数值为应用的AppKey。
+ * @param   access_token	false	string	采用OAuth授权方式为必填参数，其他授权方式不需要此参数，OAuth授权后获得。
+ * @param   lat             true	float	纬度，有效范围：-90.0到+90.0，+表示北纬。
+ * @param   long            true	float	经度，有效范围：-180.0到+180.0，+表示东经。
+ * @param   range           false	int     查询范围半径，默认为2000，最大为10000，单位米。
+ * @param   q               false	string	查询的关键词，必须进行URLencode。
+ * @param   category        false	string	查询的分类代码，取值范围见：分类代码对应表。
+ * @param   count           false	int     单页返回的记录条数，默认为20，最大为50。
+ * @param   page            false	int     返回结果的页码，默认为1。
+ * @param   sort            false	int     排序方式，0：按权重，1：按距离，3：按签到人数。默认为0。
+ * @param   offset          false	int     传入的经纬度是否是纠偏过，0：没纠偏、1：纠偏过，默认为0。
+ */
++ (void)getNearbyPoisWithLat:(CGFloat)lat Long:(CGFloat)longF range:(NSInteger)range Q:(NSString *)q Category:(NSString *)category Count:(NSInteger)count Page:(NSInteger)page Sort:(NSInteger)sort Offset:(NSInteger)offset Success:(void(^)(BOOL isSuccess,NSDictionary *result))isSuccess;
 @end

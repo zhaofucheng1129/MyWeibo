@@ -9,9 +9,15 @@
 #import <UIKit/UIKit.h>
 
 @interface SendViewController : UIViewController
+{
+    CGFloat _longitude;
+    CGFloat _latitude;
+}
 
 @property (nonatomic,retain) UITextView *textView;
-
 @property (nonatomic,retain) UIView *buttonView;
+@property (nonatomic,retain) NSDictionary *locationDictionary;
+
+
 
 @end
