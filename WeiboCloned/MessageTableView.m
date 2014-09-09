@@ -40,11 +40,18 @@
     static NSString *identifier = @"CellIdentifier";
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:identifier];
     if (cell == nil) {
-        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:identifier];
+        cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:identifier] autorelease];
     }
     cell.textLabel.text = [self.textArray objectAtIndex:indexPath.row];
     cell.imageView.image = [UIImage imageNamed:[self.imageArray objectAtIndex:indexPath.row]];
     return cell;
+}
+
+- (void)dealloc
+{
+    [_textArray release];
+    [_imageArray release];
+    [super dealloc];
 }
 
 /*

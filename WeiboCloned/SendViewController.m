@@ -40,12 +40,13 @@
 
 - (void)initViews
 {
-    self.textView = [[UITextView alloc] initWithFrame:CGRectMake(0, 0, ScreenWidth, ScreenHeight - 64)];
+    self.textView = [[[UITextView alloc] initWithFrame:CGRectMake(0, 0, ScreenWidth, ScreenHeight - 64)] autorelease];
     self.textView.scrollEnabled = NO;
 //    self.textView.backgroundColor = [UIColor grayColor];
     [self.view addSubview:self.textView];
+    [_textView release];
     
-    self.buttonView = [[UIView alloc] initWithFrame:CGRectMake(0, 300, ScreenWidth, 30)];
+    self.buttonView = [[[UIView alloc] initWithFrame:CGRectMake(0, 300, ScreenWidth, 30)] autorelease];
     self.buttonView.backgroundColor = [UIColor whiteColor];
 //    [self.view addSubview:self.buttonView];
     NSArray *imageNames = @[@"compose_toolbar_picture@2x.png",
@@ -68,6 +69,7 @@
     }
     [self.buttonView setFrame:CGRectMake(0, ScreenHeight - 30, ScreenWidth, 30)];
     [self.view addSubview:self.buttonView];
+    [_buttonView release];
     
     _rightBtn = [UIButton buttonWithType:UIButtonTypeCustom];
     [_rightBtn setTitle:@"发送" forState:UIControlStateNormal];
@@ -111,8 +113,6 @@
     [_localButton setTitleColor:[UIColor lightGrayColor] forState:UIControlStateNormal];
     [_localButton addTarget:self action:@selector(locationSearch:) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:_localButton];
-    
-    NSLog(@"%@",self.locationDictionary);
 }
 
 - (void)locationSearch:(UIButton *)sender

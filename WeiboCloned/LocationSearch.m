@@ -30,8 +30,6 @@
 {
     [super viewDidLoad];
     
-    
-    
     UIButton *rightBtn = [UIButton buttonWithType:UIButtonTypeCustom];
     [rightBtn setTitle:@"删除位置" forState:UIControlStateNormal];
     [rightBtn setTitleColor:[UIColor orangeColor] forState:UIControlStateNormal];
@@ -64,17 +62,19 @@
     }
     
     //地图
-    self.mapView = [[MKMapView alloc] initWithFrame:CGRectMake(0, 0, ScreenWidth, 200)];
+    self.mapView = [[[MKMapView alloc] initWithFrame:CGRectMake(0, 0, ScreenWidth, 200)] autorelease];
     self.mapView.mapType = MKMapTypeStandard;
     self.mapView.scrollEnabled = YES;
     self.mapView.delegate = self;
     [self.view addSubview:self.mapView];
+    [_mapView release];
     
     //附近信息列表
-    self.tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 200, ScreenWidth, self.view.height - 200) style:UITableViewStylePlain];
+    self.tableView = [[[UITableView alloc] initWithFrame:CGRectMake(0, 200, ScreenWidth, self.view.height - 200) style:UITableViewStylePlain] autorelease];
     [self.tableView setDelegate:self];
     [self.tableView setDataSource:self];
     [self.view addSubview:self.tableView];
+    [_tableView release];
 }
 
 - (void)rightButtonAction:(UIButton *)sender
@@ -107,7 +107,7 @@
     static NSString *annoId = @"annoId";
     MKPinAnnotationView *annoView = (MKPinAnnotationView *)[mapView dequeueReusableAnnotationViewWithIdentifier:annoId];
     if (!annoView) {
-        annoView = [[MKPinAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:annoId];
+        annoView = [[[MKPinAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:annoId] autorelease];
     }
     
     if ([((MKPointAnnotation *)annotation).subtitle isEqualToString:@"当前所在区域"]) {
@@ -169,7 +169,7 @@
     static NSString *identifier = @"cellId";
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:identifier];
     if (cell == nil) {
-        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:identifier];
+        cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:identifier] autorelease];
     }
     cell.textLabel.text = [[self.locationData objectAtIndex:indexPath.row] objectForKey:@"title"];
     cell.detailTextLabel.text = [[self.locationData objectAtIndex:indexPath.row] objectForKey:@"address"];
@@ -197,6 +197,14 @@
 {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+
+- (void)dealloc
+{
+    [_tableView release];
+    [_locationData release];
+    [_mapView release];
+    [super dealloc];
 }
 
 /*

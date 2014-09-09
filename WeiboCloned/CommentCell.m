@@ -99,7 +99,7 @@
 + (CGFloat)getCommentHeight:(Comment *)comment
 {
    
-    RTLabel *rtlabel = [[RTLabel alloc] initWithFrame:CGRectMake(0, 0, ScreenWidth - 10 - 49, 0)];
+    RTLabel *rtlabel = [[[RTLabel alloc] initWithFrame:CGRectMake(0, 0, ScreenWidth - 10 - 49, 0)] autorelease];
     rtlabel.font = [UIFont systemFontOfSize:14.0f];
     rtlabel.text = comment.text;
     

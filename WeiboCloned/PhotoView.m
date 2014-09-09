@@ -54,6 +54,8 @@ CGFloat margin = 5.0f;
         
         imageView.contentMode = UIViewContentModeScaleAspectFill;
         imageView.clipsToBounds = YES;
+        
+        [imageView release];
     }
 }
 

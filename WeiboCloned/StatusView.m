@@ -189,7 +189,7 @@
     CGFloat height = 0;
     
     //微博视图高度
-    RTLabel *textLabel = [[RTLabel alloc] initWithFrame:CGRectZero];
+    RTLabel *textLabel = [[[RTLabel alloc] initWithFrame:CGRectZero] autorelease];
     CGFloat fontSize = [StatusView getFontSize:isDetail isRetweet:isRetweet];
     textLabel.font = [UIFont systemFontOfSize:fontSize];
     textLabel.width = ScreenWidth - 20;
@@ -250,7 +250,7 @@
         
         UIViewController *myView = [[UIViewController alloc] init];
         [self.viewController.navigationController pushViewController:myView animated:YES];
-        
+        [myView release];
     }
     else if ([absoluteString hasPrefix:@"topic"]) {
         NSLog(@"topic:%@",urlString);

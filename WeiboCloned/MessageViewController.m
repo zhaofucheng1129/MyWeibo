@@ -36,7 +36,7 @@
         _height = 65;
     }
     
-    self.tableView = [[MessageTableView alloc] initWithFrame:CGRectMake(0, _height, ScreenWidth, ScreenHeight - 44 - 20 - 45) style:UITableViewStyleGrouped];
+    self.tableView = [[[MessageTableView alloc] initWithFrame:CGRectMake(0, _height, ScreenWidth, ScreenHeight - 44 - 20 - 45) style:UITableViewStyleGrouped] autorelease];
     self.tableView.textArray = @[@"@我的",@"评论",@"赞"];
     self.tableView.imageArray = @[@"messagescenter_at@2x.png",@"messagescenter_comments@2x.png",@"messagescenter_good@2x.png"];
     self.tableView.refreshHeader = NO;
@@ -50,6 +50,7 @@
 }
 
 - (void)dealloc {
+    [_tableView release];
     [super dealloc];
 }
 @end

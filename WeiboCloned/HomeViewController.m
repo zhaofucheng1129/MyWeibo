@@ -215,17 +215,16 @@
 {
     if (count > 0) {
         if (self.newStatusCountView == nil) {
-            self.newStatusCountView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"timeline_new_status_background@2x.png"]];
+            self.newStatusCountView = [[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"timeline_new_status_background@2x.png"]] autorelease];
             self.newStatusCountView.frame = CGRectMake(0, _height - 35, ScreenWidth, 35);
             [self.view addSubview:self.newStatusCountView];
             
-            UILabel *label = [[UILabel alloc] initWithFrame:CGRectZero];
+            UILabel *label = [[[UILabel alloc] initWithFrame:CGRectZero] autorelease];
             label.tag = 102;
             label.font = [UIFont systemFontOfSize:16.0f];
             label.textColor = [UIColor whiteColor];
             label.backgroundColor = [UIColor clearColor];
             [self.newStatusCountView addSubview:label];
-            [label release];
         }
     
         UILabel *label = (UILabel *)[self.newStatusCountView viewWithTag:102];
@@ -321,6 +320,9 @@
 
 - (void)dealloc {
     [_tableView release];
+    [_newStatusCountView release];
+    [_SinceId release];
+    [_MaxId release];
     [super dealloc];
 }
 @end

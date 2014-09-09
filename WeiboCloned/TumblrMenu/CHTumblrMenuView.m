@@ -103,7 +103,7 @@
         [self addSubview:backgroundView_];
         buttons_ = [[NSMutableArray alloc] initWithCapacity:6];
         
-        UIImageView *imageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"tabbar_background@2x.png"]];
+        UIImageView *imageView = [[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"tabbar_background@2x.png"]] autorelease];
         [imageView setFrame:CGRectMake(0, ScreenHeight - 44, ScreenWidth, 44)];
         [self addSubview:imageView];
         

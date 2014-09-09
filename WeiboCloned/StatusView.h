@@ -15,7 +15,7 @@
 {
     @private
     RTLabel *_textLabel;
-    UIImageView *_image; //微博图片
+//    UIImageView *_image; //微博图片
     PhotoView *_photoView;
     UIImageView *_backgroundImage;
     StatusView *_retweetView;
