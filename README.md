@@ -3,6 +3,9 @@ MyWeibo
 
 仿制的新浪微博
 
+![pic1](/pics/pic1.png)   ![pic2](/pics/pic2.png) <br> 
+![pic3](/pics/pic3.png)
+
 功能
 =======
 使用ASI访问微博接口 <br>
