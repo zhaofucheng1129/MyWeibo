@@ -3,7 +3,7 @@ MyWeibo
 
 仿制的新浪微博
 
-![pic1](pics/pic1.jpg) _ ![pic2](pics/pic2.jpg)_ ![pic3](pics/pic3.jpg)
+![pic1](/pics/pic1.png) _ ![pic2](/pics/pic2.png)_ ![pic3](/pics/pic3.png)
 
 功能
 =======
