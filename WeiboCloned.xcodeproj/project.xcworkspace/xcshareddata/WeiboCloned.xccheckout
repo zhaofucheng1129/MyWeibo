@@ -10,29 +10,29 @@
 	<string>WeiboCloned</string>
 	<key>IDESourceControlProjectOriginsDictionary</key>
 	<dict>
-		<key>D3D796AC-2B00-4AC5-80DD-56BEDAFAC251</key>
-		<string>ssh://github.com/zhaofucheng1129/MyWeibo.git</string>
+		<key>9FA12CD6CE9901C7E487303796A0C60AD91D9FD5</key>
+		<string>github.com:zhaofucheng1129/MyWeibo.git</string>
 	</dict>
 	<key>IDESourceControlProjectPath</key>
-	<string>WeiboCloned.xcodeproj/project.xcworkspace</string>
+	<string>WeiboCloned.xcodeproj</string>
 	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
 	<dict>
-		<key>D3D796AC-2B00-4AC5-80DD-56BEDAFAC251</key>
+		<key>9FA12CD6CE9901C7E487303796A0C60AD91D9FD5</key>
 		<string>../..</string>
 	</dict>
 	<key>IDESourceControlProjectURL</key>
-	<string>ssh://github.com/zhaofucheng1129/MyWeibo.git</string>
+	<string>github.com:zhaofucheng1129/MyWeibo.git</string>
 	<key>IDESourceControlProjectVersion</key>
-	<integer>110</integer>
+	<integer>111</integer>
 	<key>IDESourceControlProjectWCCIdentifier</key>
-	<string>D3D796AC-2B00-4AC5-80DD-56BEDAFAC251</string>
+	<string>9FA12CD6CE9901C7E487303796A0C60AD91D9FD5</string>
 	<key>IDESourceControlProjectWCConfigurations</key>
 	<array>
 		<dict>
 			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
 			<string>public.vcs.git</string>
 			<key>IDESourceControlWCCIdentifierKey</key>
-			<string>D3D796AC-2B00-4AC5-80DD-56BEDAFAC251</string>
+			<string>9FA12CD6CE9901C7E487303796A0C60AD91D9FD5</string>
 			<key>IDESourceControlWCCName</key>
 			<string>MyWeibo</string>
 		</dict>
