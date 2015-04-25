@@ -21,3 +21,8 @@ MyWeibo
 =======
 xcode5.1<br>
 没有启用arc
+
+因为 sina开放平台的权限问题  可以去![http://open.weibo.com/apps](http://open.weibo.com/apps)创建一个 自己的应用 然后将项目中的 
+#define kAppKey         @"4119862942"<br>
+#define kAppSecret      @"b0c0dd997c99c04f8df4ec37a4846c96"<br>
+#define kRedirectURI    @"https://api.weibo.com/oauth2/default.html"<br>
